@@ -40,7 +40,6 @@ describe("Node Server Request Listener Function", function() {
   it("Should answer GET requests for archived websites", function(done) {
     var fixtureName = "www.google.com";
     var fixturePath = archive.paths.archivedSites + "/" + fixtureName;
-
     // Create or clear the file.
     var fd = fs.openSync(fixturePath, "w");
     fs.closeSync(fd);
