@@ -35,11 +35,14 @@ exports.isUrlInList = function(string, array){
   return _.contains(array, string);
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(string){
+  fs.appendFile(this.paths.list, string + '/n');
 };
 
-exports.isURLArchived = function(){
-
+exports.isURLArchived = function(string, callback){ //string = 'www.youtube.com'
+  fs.exists(this.paths.archivedSites + '/' + string + '.html', function (exists) {
+    callback(exists);
+  });
 };
 
 exports.downloadUrls = function(){
