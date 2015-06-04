@@ -22,7 +22,7 @@ exports.handleRequest = function (req, res) {
             res.end(data);
           });
         } else {
-          archive.isUrlInList(string);
+          archive.addUrlToList(string);
           fs.readFile(__dirname+'/public/loading.html', function (err, data) {
             res.writeHead(200, http.headers);
             res.end(data);
