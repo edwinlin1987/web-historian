@@ -6,18 +6,31 @@ var fs = require('fs');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
-
   var pathname = url.parse(req.url);
-  //console.log(req._po);
   console.log("Serving request type " + req.method + " for url " + req.url);
   if( req.method === 'POST'){
-    var status = 200;
-    res.writeHead(status,http.headers);
-    res.end('')
-
-  }
-
-  if (pathname.pathname === '/www.google.com') {
+    var string = '';
+    req.on('data',function (chunk) {
+      string += chunk;
+    });
+    req.on('end',function(){
+      string = string.slice(4);
+      archive.readListOfUrls(function(array) {
+        if (archive.isUrlInList(string,array)){
+          fs.readFile(archive.paths.archivedSites+'/'+ string +'.html', function (err, data){
+            res.writeHead(200, http.headers);
+            res.end(data);
+          });
+        } else {
+          fs.appendFile(archive.paths.list, string + '\n');
+          fs.readFile(__dirname+'/public/loading.html', function (err, data) {
+            res.writeHead(200, http.headers);
+            res.end(data);
+          });
+        }
+      });
+    });
+  } else if (pathname.pathname === '/www.google.com') {
     if( req.method === 'GET') {
       var status = 200;
       res.writeHead(status,http.headers);

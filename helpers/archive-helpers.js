@@ -31,13 +31,15 @@ exports.readListOfUrls = function(callback){
   });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(string, array){
+  return _.contains(array, string);
 };
 
 exports.addUrlToList = function(){
 };
 
 exports.isURLArchived = function(){
+
 };
 
 exports.downloadUrls = function(){
