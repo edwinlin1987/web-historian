@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require('http-request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -26,7 +27,7 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback){
-  fs.readFile(this.paths.list, function (err, data) {
+  fs.readFile(exports.paths.list, function (err, data) {
      callback(data.toString().split('\n'));
   });
 };
@@ -36,14 +37,21 @@ exports.isUrlInList = function(string, array){
 };
 
 exports.addUrlToList = function(string){
-  fs.appendFile(this.paths.list, string + '/n');
+  fs.appendFile(exports.paths.list, string + '\n');
 };
 
 exports.isURLArchived = function(string, callback){ //string = 'www.youtube.com'
-  fs.exists(this.paths.archivedSites + '/' + string + '.html', function (exists) {
+  fs.exists(exports.paths.archivedSites + '/' + string + '.html', function (exists) {
     callback(exists);
   });
 };
 
 exports.downloadUrls = function(){
+  exports.readListOfUrls(function (array) {
+    _.each(array, function (string) {
+      http.get('http://'+string, exports.paths.archivedSites + '/' + string + '.html', function (err, res) {
+        console.log('success!');
+      });
+    });
+  });
 };
